@@ -48,4 +48,8 @@ def crear_nota(request):
 
 def lista_notas(request):
     notas = NotaAlumnoCurso.objects.select_related('alumno', 'curso').all()
-    return render(request, 'notas/lista_notas.html', {'notas': notas})
+    return render(request, 'notas/lista_notas.html', {
+        'notas': notas,
+        'alumnos_count': Alumno.objects.count(),
+        'cursos_count': Curso.objects.count(),
+    })

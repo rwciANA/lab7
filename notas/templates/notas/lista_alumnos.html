@@ -4,36 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Alumnos</title>
+    <title>Sistema de Notas</title>
     <link rel="stylesheet" href="{% static 'notas/style.css' %}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            Sistema de Notas
+            <span>v1.0</span>
+        </div>
+        <div class="navbar-nav">
+            <a href="{% url 'lista_notas' %}">Inicio</a>
+            <a href="{% url 'lista_alumnos' %}">Alumnos</a>
+            <a href="{% url 'lista_cursos' %}">Cursos</a>
+            <a href="{% url 'crear_nota' %}">Nueva Nota</a>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="card">
-            <div class="card-header">
+        <div class="page-header">
+            <div>
                 <h1>Lista de Alumnos</h1>
-                <p>Total: {{ alumnos|length }} alumno{{ alumnos|length|pluralize:'s' }}</p>
-                <div class="nav-links">
-                    <a href="{% url 'crear_alumno' %}">Registrar alumno</a>
-                    <a href="{% url 'lista_cursos' %}">Ver cursos</a>
-                    <a href="{% url 'lista_notas' %}">Ver notas</a>
-                </div>
+                <div class="subtitle">{{ alumnos|length }} alumno{{ alumnos|length|pluralize:'s' }} registrado{{ alumnos|length|pluralize:'s' }}</div>
             </div>
-            <div class="list-view">
+            <div class="page-actions">
+                <a href="{% url 'crear_alumno' %}" class="btn btn-primary">Nuevo Alumno</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
                 {% if alumnos %}
-                <ul>
-                    {% for alumno in alumnos %}
-                    <li>
-                        <div class="item-icon">{{ alumno.nombre|first }}{{ alumno.apellido|first }}</div>
-                        <div class="item-info">
-                            <div class="item-title">{{ alumno.nombre }} {{ alumno.apellido }}</div>
-                            <div class="item-subtitle">DNI: {{ alumno.dni }} | Email: {{ alumno.email }}</div>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <div class="list-view">
+                    <ul>
+                        {% for alumno in alumnos %}
+                        <li>
+                            <div class="item-avatar">{{ alumno.nombre|first }}{{ alumno.apellido|first }}</div>
+                            <div class="item-info">
+                                <div class="item-title">{{ alumno.nombre }} {{ alumno.apellido }}</div>
+                                <div class="item-subtitle">DNI: {{ alumno.dni }} &middot; {{ alumno.email }}</div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% else %}
-                <div class="empty-msg">No hay alumnos registrados.</div>
+                <div class="empty-state">
+                    <div class="empty-icon">&#128218;</div>
+                    <h3>No hay alumnos registrados</h3>
+                    <p>Registre el primer alumno para comenzar.</p>
+                    <a href="{% url 'crear_alumno' %}" class="btn btn-primary">Registrar Alumno</a>
+                </div>
                 {% endif %}
             </div>
         </div>

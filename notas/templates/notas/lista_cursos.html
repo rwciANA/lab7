@@ -4,36 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Cursos</title>
+    <title>Sistema de Notas</title>
     <link rel="stylesheet" href="{% static 'notas/style.css' %}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            Sistema de Notas
+            <span>v1.0</span>
+        </div>
+        <div class="navbar-nav">
+            <a href="{% url 'lista_notas' %}">Inicio</a>
+            <a href="{% url 'lista_alumnos' %}">Alumnos</a>
+            <a href="{% url 'lista_cursos' %}">Cursos</a>
+            <a href="{% url 'crear_nota' %}">Nueva Nota</a>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="card">
-            <div class="card-header">
+        <div class="page-header">
+            <div>
                 <h1>Lista de Cursos</h1>
-                <p>Total: {{ cursos|length }} curso{{ cursos|length|pluralize:'s' }}</p>
-                <div class="nav-links">
-                    <a href="{% url 'crear_curso' %}">Registrar curso</a>
-                    <a href="{% url 'lista_alumnos' %}">Ver alumnos</a>
-                    <a href="{% url 'lista_notas' %}">Ver notas</a>
-                </div>
+                <div class="subtitle">{{ cursos|length }} curso{{ cursos|length|pluralize:'s' }} registrado{{ cursos|length|pluralize:'s' }}</div>
             </div>
-            <div class="list-view">
+            <div class="page-actions">
+                <a href="{% url 'crear_curso' %}" class="btn btn-primary">Nuevo Curso</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
                 {% if cursos %}
-                <ul>
-                    {% for curso in cursos %}
-                    <li>
-                        <div class="item-icon">{{ curso.codigo|slice:':3' }}</div>
-                        <div class="item-info">
-                            <div class="item-title">{{ curso.nombre }}</div>
-                            <div class="item-subtitle">{{ curso.codigo }} | {{ curso.creditos }} credito{{ curso.creditos|pluralize:'s' }}</div>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <div class="list-view">
+                    <ul>
+                        {% for curso in cursos %}
+                        <li>
+                            <div class="item-avatar orange">{{ curso.codigo|slice:':2' }}</div>
+                            <div class="item-info">
+                                <div class="item-title">{{ curso.nombre }}</div>
+                                <div class="item-subtitle">{{ curso.codigo }} &middot; {{ curso.creditos }} credito{{ curso.creditos|pluralize:'s' }}</div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% else %}
-                <div class="empty-msg">No hay cursos registrados.</div>
+                <div class="empty-state">
+                    <div class="empty-icon">&#128218;</div>
+                    <h3>No hay cursos registrados</h3>
+                    <p>Cree el primer curso para comenzar.</p>
+                    <a href="{% url 'crear_curso' %}" class="btn btn-primary">Registrar Curso</a>
+                </div>
                 {% endif %}
             </div>
         </div>

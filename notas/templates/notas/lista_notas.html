@@ -4,45 +4,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Notas</title>
+    <title>Sistema de Notas</title>
     <link rel="stylesheet" href="{% static 'notas/style.css' %}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            Sistema de Notas
+            <span>v1.0</span>
+        </div>
+        <div class="navbar-nav">
+            <a href="{% url 'lista_notas' %}" class="active">Inicio</a>
+            <a href="{% url 'lista_alumnos' %}">Alumnos</a>
+            <a href="{% url 'lista_cursos' %}">Cursos</a>
+            <a href="{% url 'crear_nota' %}">Nueva Nota</a>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h1>Lista de Notas por Alumno y Curso</h1>
-                <p>Total: {{ notas|length }} nota{{ notas|length|pluralize:'s' }} registrada{{ notas|length|pluralize:'s' }}</p>
-                <div class="nav-links">
-                    <a href="{% url 'crear_nota' %}">Registrar nota</a>
-                    <a href="{% url 'lista_alumnos' %}">Ver alumnos</a>
-                    <a href="{% url 'lista_cursos' %}">Ver cursos</a>
+        <div class="page-header">
+            <div>
+                <h1>Notas Registradas</h1>
+                <div class="subtitle">{{ notas|length }} nota{{ notas|length|pluralize:'s' }} registrada{{ notas|length|pluralize:'s' }}</div>
+            </div>
+            <div class="page-actions">
+                <a href="{% url 'crear_nota' %}" class="btn btn-success">Nueva Nota</a>
+                <a href="{% url 'crear_alumno' %}" class="btn btn-primary">Nuevo Alumno</a>
+                <a href="{% url 'crear_curso' %}" class="btn btn-secondary">Nuevo Curso</a>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon blue">{{ total_alumnos|default:alumnos_count }}</div>
+                <div class="stat-content">
+                    <h3>{{ total_alumnos|default:alumnos_count }}</h3>
+                    <p>Alumnos</p>
                 </div>
             </div>
-            {% if notas %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Alumno</th>
-                        <th>Curso</th>
-                        <th>Nota</th>
-                        <th>Fecha de Registro</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for nota in notas %}
-                    <tr>
-                        <td>{{ nota.alumno }}</td>
-                        <td>{{ nota.curso }}</td>
-                        <td><strong>{{ nota.nota }}</strong></td>
-                        <td>{{ nota.fecha_registro }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty-msg">No hay notas registradas.</div>
-            {% endif %}
+            <div class="stat-card">
+                <div class="stat-icon orange">{{ total_cursos|default:cursos_count }}</div>
+                <div class="stat-content">
+                    <h3>{{ total_cursos|default:cursos_count }}</h3>
+                    <p>Cursos</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">{{ notas|length }}</div>
+                <div class="stat-content">
+                    <h3>{{ notas|length }}</h3>
+                    <p>Notas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                {% if notas %}
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Alumno</th>
+                                <th>Curso</th>
+                                <th>Nota</th>
+                                <th>Fecha de Registro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for nota in notas %}
+                            {% with nota.nota as n %}
+                            <tr>
+                                <td><strong>{{ nota.alumno }}</strong></td>
+                                <td>{{ nota.curso }}</td>
+                                <td>
+                                    <span class="grade-badge
+                                        {% if n >= 18 %}grade-excellent
+                                        {% elif n >= 14 %}grade-good
+                                        {% elif n >= 11 %}grade-regular
+                                        {% else %}grade-low{% endif %}">
+                                        {{ n }}
+                                    </span>
+                                </td>
+                                <td><span class="datetime-display">{{ nota.fecha_registro }}</span></td>
+                            </tr>
+                            {% endwith %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">&#128203;</div>
+                    <h3>No hay notas registradas</h3>
+                    <p>Registre la primera nota para comenzar.</p>
+                    <a href="{% url 'crear_nota' %}" class="btn btn-success">Registrar Nota</a>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </body>

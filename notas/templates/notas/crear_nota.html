@@ -4,40 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Nota</title>
+    <title>Sistema de Notas</title>
     <link rel="stylesheet" href="{% static 'notas/style.css' %}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            Sistema de Notas
+            <span>v1.0</span>
+        </div>
+        <div class="navbar-nav">
+            <a href="{% url 'lista_notas' %}">Inicio</a>
+            <a href="{% url 'lista_alumnos' %}">Alumnos</a>
+            <a href="{% url 'lista_cursos' %}">Cursos</a>
+            <a href="{% url 'crear_nota' %}">Nueva Nota</a>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h1>Registrar Nota por Curso</h1>
-                <p>Seleccione el alumno, el curso e ingrese la nota</p>
-                <div class="nav-links">
-                    <a href="{% url 'lista_notas' %}">Ver notas</a>
-                    <a href="{% url 'lista_alumnos' %}">Ver alumnos</a>
-                    <a href="{% url 'lista_cursos' %}">Ver cursos</a>
-                </div>
+        <div class="page-header">
+            <div>
+                <h1>Registrar Nota</h1>
+                <div class="subtitle">Asigne una nota a un alumno en un curso</div>
             </div>
-            <form method="post">
-                {% csrf_token %}
-                {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.help_text %}
-                    <span class="helptext">{{ field.help_text }}</span>
-                    {% endif %}
-                    {% for error in field.errors %}
-                    <ul class="errorlist"><li>{{ error }}</li></ul>
+            <div class="page-actions">
+                <a href="{% url 'lista_notas' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
+
+        <div class="card form-card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}
+                        <span class="helptext">{{ field.help_text }}</span>
+                        {% endif %}
+                        {% for error in field.errors %}
+                        <ul class="errorlist"><li>{{ error }}</li></ul>
+                        {% endfor %}
+                    </div>
                     {% endfor %}
-                </div>
-                {% endfor %}
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a href="{% url 'lista_notas' %}" class="btn btn-secondary">Cancelar</a>
-                </div>
-            </form>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success">Guardar Nota</button>
+                        <a href="{% url 'lista_notas' %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </body>
