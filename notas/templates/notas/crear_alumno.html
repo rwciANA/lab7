@@ -1,15 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Alumno</title>
+    <link rel="stylesheet" href="{% static 'notas/style.css' %}">
 </head>
 <body>
-    <h1>Registrar Nuevo Alumno</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Guardar</button>
-    </form>
-    <a href="{% url 'lista_alumnos' %}">Ver alumnos</a>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Registrar Nuevo Alumno</h1>
+                <p>Complete los datos del nuevo alumno</p>
+                <div class="nav-links">
+                    <a href="{% url 'lista_alumnos' %}">Ver alumnos</a>
+                    <a href="{% url 'lista_cursos' %}">Ver cursos</a>
+                    <a href="{% url 'lista_notas' %}">Ver notas</a>
+                </div>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                    <span class="helptext">{{ field.help_text }}</span>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <ul class="errorlist"><li>{{ error }}</li></ul>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a href="{% url 'lista_alumnos' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,17 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Cursos</title>
+    <link rel="stylesheet" href="{% static 'notas/style.css' %}">
 </head>
 <body>
-    <h1>Lista de Cursos</h1>
-    <ul>
-        {% for curso in cursos %}
-            <li>{{ curso.nombre }} ({{ curso.codigo }}) - {{ curso.creditos }} creditos</li>
-        {% empty %}
-            <li>No hay cursos registrados.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'crear_curso' %}">Registrar curso</a>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Lista de Cursos</h1>
+                <p>Total: {{ cursos|length }} curso{{ cursos|length|pluralize:'s' }}</p>
+                <div class="nav-links">
+                    <a href="{% url 'crear_curso' %}">Registrar curso</a>
+                    <a href="{% url 'lista_alumnos' %}">Ver alumnos</a>
+                    <a href="{% url 'lista_notas' %}">Ver notas</a>
+                </div>
+            </div>
+            <div class="list-view">
+                {% if cursos %}
+                <ul>
+                    {% for curso in cursos %}
+                    <li>
+                        <div class="item-icon">{{ curso.codigo|slice:':3' }}</div>
+                        <div class="item-info">
+                            <div class="item-title">{{ curso.nombre }}</div>
+                            <div class="item-subtitle">{{ curso.codigo }} | {{ curso.creditos }} credito{{ curso.creditos|pluralize:'s' }}</div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-msg">No hay cursos registrados.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </body>
 </html>

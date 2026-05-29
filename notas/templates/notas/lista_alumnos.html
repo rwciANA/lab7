@@ -1,17 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Alumnos</title>
+    <link rel="stylesheet" href="{% static 'notas/style.css' %}">
 </head>
 <body>
-    <h1>Lista de Alumnos</h1>
-    <ul>
-        {% for alumno in alumnos %}
-            <li>{{ alumno.nombre }} {{ alumno.apellido }} - DNI: {{ alumno.dni }}</li>
-        {% empty %}
-            <li>No hay alumnos registrados.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'crear_alumno' %}">Registrar alumno</a>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Lista de Alumnos</h1>
+                <p>Total: {{ alumnos|length }} alumno{{ alumnos|length|pluralize:'s' }}</p>
+                <div class="nav-links">
+                    <a href="{% url 'crear_alumno' %}">Registrar alumno</a>
+                    <a href="{% url 'lista_cursos' %}">Ver cursos</a>
+                    <a href="{% url 'lista_notas' %}">Ver notas</a>
+                </div>
+            </div>
+            <div class="list-view">
+                {% if alumnos %}
+                <ul>
+                    {% for alumno in alumnos %}
+                    <li>
+                        <div class="item-icon">{{ alumno.nombre|first }}{{ alumno.apellido|first }}</div>
+                        <div class="item-info">
+                            <div class="item-title">{{ alumno.nombre }} {{ alumno.apellido }}</div>
+                            <div class="item-subtitle">DNI: {{ alumno.dni }} | Email: {{ alumno.email }}</div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-msg">No hay alumnos registrados.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </body>
 </html>
